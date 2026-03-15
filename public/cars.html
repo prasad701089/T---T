@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Our Cars | Kadam Travels</title>
+    <style>
+        :root {
+            --brand-blue: #0d4a99;
+            --brand-blue-dark: #083a7b;
+            --page-bg: #f4f3f8;
+            --card-bg: rgba(255, 255, 255, 0.92);
+            --card-border: #e2e6ee;
+            --text-dark: #2c3342;
+            --text-soft: #566074;
+            --accent-green: #228d5b;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+            background: var(--page-bg);
+            color: var(--text-dark);
+        }
+
+        a {
+            color: inherit;
+            text-decoration: none;
+        }
+
+        .topbar {
+            background: linear-gradient(180deg, var(--brand-blue), var(--brand-blue-dark));
+            color: #fff;
+            padding: 14px 32px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
+            font-weight: 600;
+        }
+
+        .contact-line {
+            font-size: 1.05rem;
+            white-space: nowrap;
+        }
+
+        .nav {
+            display: flex;
+            align-items: center;
+            gap: 34px;
+            flex-wrap: wrap;
+        }
+
+        .nav a {
+            position: relative;
+            font-size: 1.2rem;
+        }
+
+        .nav a.active::after {
+            content: "";
+            position: absolute;
+            left: 0;
+            right: 0;
+            bottom: -8px;
+            height: 2px;
+            background: #fff;
+            border-radius: 999px;
+        }
+
+        .page {
+            width: min(1120px, calc(100% - 36px));
+            margin: 0 auto;
+            padding: 34px 0 44px;
+        }
+
+        .page-title {
+            margin: 0 0 12px;
+            text-align: center;
+            color: var(--brand-blue);
+            font-size: clamp(2.3rem, 4vw, 3.4rem);
+            font-weight: 800;
+        }
+
+        .page-note {
+            max-width: 900px;
+            margin: 0 auto 30px;
+            text-align: center;
+            color: var(--text-soft);
+            font-size: clamp(1.05rem, 1.8vw, 1.3rem);
+            line-height: 1.6;
+        }
+
+        .car-overview {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 18px;
+            margin-bottom: 30px;
+        }
+
+        .car-link-card {
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            box-shadow: 0 10px 24px rgba(20, 31, 56, 0.05);
+        }
+
+        .car-link-card {
+            overflow: hidden;
+        }
+
+        .car-media {
+            aspect-ratio: 16 / 10;
+            background: linear-gradient(180deg, #edf3fb, #dfe7f2);
+            overflow: hidden;
+        }
+
+        .car-link-card .card-body {
+            padding: 16px 18px 18px;
+        }
+
+        .car-link-card h2 {
+            margin: 0 0 10px;
+            color: var(--brand-blue);
+            font-size: 1.35rem;
+        }
+
+        .car-link-card p {
+            margin: 0 0 14px;
+            color: var(--text-soft);
+            line-height: 1.5;
+        }
+
+        .view-details {
+            display: inline-block;
+            padding: 10px 16px;
+            background: #edf4ff;
+            color: var(--brand-blue);
+            font-weight: 700;
+            border-radius: 3px;
+        }
+
+        .car-svg,
+        .car-image {
+            display: block;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        @media (max-width: 900px) {
+            .topbar {
+                padding: 14px 18px;
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .nav {
+                justify-content: center;
+                gap: 18px 24px;
+            }
+
+            .car-overview {
+                grid-template-columns: 1fr;
+            }
+
+        }
+
+        @media (max-width: 640px) {
+            .page {
+                width: min(100% - 24px, 1120px);
+                padding-top: 28px;
+            }
+        }
+
+        @media (max-width: 420px) {
+            .contact-line {
+                font-size: 0.96rem;
+            }
+
+            .nav {
+                gap: 12px 18px;
+            }
+
+            .nav a {
+                font-size: 1rem;
+            }
+
+            .page-title {
+                font-size: 2rem;
+            }
+
+            .car-link-card .card-body {
+                padding: 14px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="topbar">
+        <div class="contact-line">Call Us: +91 7756877762</div>
+        <nav class="nav">
+            <a href="index.html">Home</a>
+            <a class="active" href="cars.html">Our Cars</a>
+            <a href="booking.html">Booking</a>
+            <a href="contact.html">Contact</a>
+        </nav>
+    </header>
+
+    <main class="page">
+        <h1 class="page-title">Our Cars</h1>
+        <p class="page-note">Explore all available cars from Ram Vijay Tours & Travels. Click view details to open with pricing, seating, trip suitability, and booking information.</p>
+
+        <section class="car-overview">
+            <a class="car-link-card" href="swift-dzire.html">
+                <div class="car-media">
+                    <img class="car-image" src="/images/swift.png" alt="Swift Dzire">
+                </div>
+                <div class="card-body">
+                    <h2>Swift Dzire</h2>
+                    <p>Compact sedan for city travel, airport pickup, and couples or small family rides.</p>
+                    <span class="view-details">View Details</span>
+                </div>
+            </a>
+
+            <a class="car-link-card" href="ertiga.html">
+                <div class="car-media">
+                    <img class="car-image" src="/images/ertiga.png" alt="">
+                </div>
+                <div class="card-body">
+                    <h2>Ertiga</h2>
+                    <p>Comfortable MUV with extra seating for larger families and longer outstation rides.</p>
+                    <span class="view-details">View Details</span>
+                </div>
+            </a>
+
+            <a class="car-link-card" href="innova.html">
+                <div class="car-media">
+                    <img class="car-image" src="/images/innova.png" alt="">
+                </div>
+                <div class="card-body">
+                    <h2>Innova</h2>
+                    <p>Spacious premium option suited for group travel, corporate rides, and long journeys.</p>
+                    <span class="view-details">View Details</span>
+                </div>
+            </a>
+        </section>
+    </main>
+</body>
+</html>

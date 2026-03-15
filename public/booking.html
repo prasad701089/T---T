@@ -1,0 +1,446 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Booking | Kadam Travels</title>
+    <style>
+        :root {
+            --brand-blue: #0d4a99;
+            --brand-blue-dark: #083a7b;
+            --page-bg: #f4f3f8;
+            --card-border: #e3e5ea;
+            --text-dark: #2f3140;
+            --text-soft: #5f6573;
+            --field-icon: #767d8a;
+            --success: #27a34c;
+            --success-dark: #1e893f;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+            background: var(--page-bg);
+            color: var(--text-dark);
+        }
+
+        a {
+            color: inherit;
+            text-decoration: none;
+        }
+
+        .topbar {
+            background: linear-gradient(180deg, var(--brand-blue), var(--brand-blue-dark));
+            color: #fff;
+            padding: 14px 32px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
+            font-weight: 600;
+        }
+
+        .contact-line {
+            font-size: 1.05rem;
+            white-space: nowrap;
+        }
+
+        .nav {
+            display: flex;
+            align-items: center;
+            gap: 34px;
+            flex-wrap: wrap;
+        }
+
+        .nav a {
+            position: relative;
+            font-size: 1.2rem;
+        }
+
+        .nav a.active::after {
+            content: "";
+            position: absolute;
+            left: 0;
+            right: 0;
+            bottom: -8px;
+            height: 2px;
+            background: #fff;
+            border-radius: 999px;
+        }
+
+        .page {
+            width: min(980px, calc(100% - 36px));
+            margin: 0 auto;
+            padding: 34px 0 40px;
+        }
+
+        .page-title {
+            margin: 0 0 28px;
+            text-align: center;
+            color: var(--brand-blue);
+            font-size: clamp(2.3rem, 4vw, 3.35rem);
+            font-weight: 800;
+        }
+
+        .booking-card {
+            max-width: 920px;
+            margin: 0 auto;
+            padding: 28px 22px 24px;
+            background: rgba(255, 255, 255, 0.9);
+            border: 1px solid var(--card-border);
+            box-shadow: 0 8px 22px rgba(23, 33, 56, 0.05);
+        }
+
+        .booking-card h2 {
+            margin: 0;
+            text-align: center;
+            font-size: clamp(2rem, 3vw, 2.8rem);
+            color: var(--text-dark);
+        }
+
+        .booking-card p {
+            margin: 16px 0 26px;
+            text-align: center;
+            color: #4e5564;
+            font-size: clamp(1.05rem, 1.8vw, 1.4rem);
+        }
+
+        .booking-form {
+            display: grid;
+            gap: 12px;
+        }
+
+        .field-row {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            min-height: 56px;
+            padding: 0 16px;
+            background: #fff;
+            border: 1px solid #dedfe3;
+            border-radius: 3px;
+        }
+
+        .field-icon {
+            width: 22px;
+            flex-shrink: 0;
+            color: var(--field-icon);
+            font-size: 18px;
+            text-align: center;
+        }
+
+        .field-row input,
+        .field-row select {
+            width: 100%;
+            border: 0;
+            outline: 0;
+            background: transparent;
+            color: var(--text-dark);
+            font: inherit;
+            font-size: 1.15rem;
+        }
+
+        .field-row input::placeholder {
+            color: var(--text-dark);
+            opacity: 1;
+        }
+
+        .field-row select {
+            appearance: none;
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            cursor: pointer;
+        }
+
+        .select-row {
+            position: relative;
+        }
+
+        .select-row::after {
+            content: "\2304";
+            position: absolute;
+            right: 16px;
+            top: 50%;
+            transform: translateY(-56%);
+            font-size: 24px;
+            color: #636a78;
+            pointer-events: none;
+        }
+
+        .booking-submit {
+            margin-top: 12px;
+            min-height: 58px;
+            width: 100%;
+            border: 0;
+            border-radius: 3px;
+            background: linear-gradient(180deg, var(--success), var(--success-dark));
+            color: #fff;
+            font: inherit;
+            font-size: 1.28rem;
+            font-weight: 700;
+            cursor: pointer;
+            box-shadow: 0 10px 22px rgba(30, 137, 63, 0.18);
+        }
+
+        .booking-submit:hover {
+            background: linear-gradient(180deg, #249b48, #1b7b39);
+        }
+
+        .location-tools {
+            display: grid;
+            gap: 8px;
+            margin-top: -2px;
+        }
+
+        .location-button {
+            min-height: 46px;
+            border: 1px solid #c9d5ea;
+            border-radius: 3px;
+            background: #eef4ff;
+            color: var(--brand-blue);
+            font: inherit;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .location-button:hover {
+            background: #e4edff;
+        }
+
+        .location-status {
+            min-height: 20px;
+            color: var(--text-soft);
+            font-size: 0.95rem;
+        }
+
+        @media (max-width: 760px) {
+            .topbar {
+                padding: 14px 18px;
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .nav {
+                justify-content: center;
+                gap: 18px 24px;
+            }
+
+            .page {
+                width: min(100% - 24px, 980px);
+                padding-top: 28px;
+            }
+
+            .booking-card {
+                padding: 24px 16px 20px;
+            }
+
+            .field-row {
+                min-height: 52px;
+                padding: 0 14px;
+            }
+        }
+
+        @media (max-width: 420px) {
+            .contact-line {
+                font-size: 0.96rem;
+            }
+
+            .nav {
+                gap: 12px 18px;
+            }
+
+            .nav a {
+                font-size: 1rem;
+            }
+
+            .page-title {
+                margin-bottom: 22px;
+                font-size: 2rem;
+            }
+
+            .booking-card h2 {
+                font-size: 1.9rem;
+            }
+
+            .booking-card p {
+                margin-bottom: 20px;
+                font-size: 1rem;
+            }
+
+            .field-row input,
+            .field-row select {
+                font-size: 1rem;
+            }
+
+            .booking-submit {
+                min-height: 52px;
+                font-size: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="topbar">
+        <div class="contact-line">Call Us: +91 7756877762</div>
+        <nav class="nav">
+            <a href="index.html">Home</a>
+            <a href="cars.html">Our Cars</a>
+            <a class="active" href="booking.html">Booking</a>
+            <a href="contact.html">Contact</a>
+        </nav>
+    </header>
+
+    <main class="page">
+        <h1 class="page-title">Booking</h1>
+
+        <section class="booking-card">
+            <h2>Book Your Ride</h2>
+            <p>Please fill out the form below to book your ride.</p>
+
+            <form class="booking-form" id="bookingForm">
+                <label class="field-row" for="customerName">
+                    <span class="field-icon">&#128100;</span>
+                    <input id="customerName" name="customerName" type="text" placeholder="Name" required>
+                </label>
+
+                <label class="field-row" for="mobileNumber">
+                    <span class="field-icon">&#128222;</span>
+                    <input id="mobileNumber" name="mobileNumber" type="tel" inputmode="tel" placeholder="Mobile Number" required>
+                </label>
+
+                <label class="field-row" for="pickupLocation">
+                    <span class="field-icon">&#128205;</span>
+                    <input id="pickupLocation" name="pickupLocation" type="text" placeholder="Pickup Location" required>
+                </label>
+
+                <div class="location-tools">
+                    <button class="location-button" id="useCurrentLocation" type="button">Use Current Pickup Location from Map</button>
+                    <div class="location-status" id="locationStatus"></div>
+                </div>
+
+                <input id="pickupLatitude" name="pickupLatitude" type="hidden">
+                <input id="pickupLongitude" name="pickupLongitude" type="hidden">
+                <input id="pickupMapLink" name="pickupMapLink" type="hidden">
+
+                <label class="field-row" for="dropLocation">
+                    <span class="field-icon">&#128205;</span>
+                    <input id="dropLocation" name="dropLocation" type="text" placeholder="Drop Location" required>
+                </label>
+
+                <label class="field-row" for="travelDate">
+                    <span class="field-icon">&#128197;</span>
+                    <input id="travelDate" name="travelDate" type="date" required>
+                </label>
+
+                <!-- <label class="field-row select-row" for="carCategory">
+                    <select id="carCategory" name="carCategory" required>
+                        <option value="" selected disabled>Select Car</option>
+                    </select>
+                </label> -->
+
+                <label class="field-row select-row" for="carType">
+                    <select id="carType" name="carType" required>
+                        <option value="Swift Dzire" selected>Swift Dzire</option>
+                        <option value="Ertiga">Ertiga</option>
+                        <option value="Innova">Innova</option>
+                    </select>
+                </label>
+
+                <button class="booking-submit" type="submit">Send Booking Details on WhatsApp</button>
+            </form>
+        </section>
+    </main>
+
+    <script>
+        const bookingForm = document.getElementById("bookingForm");
+        const carTypeField = document.getElementById("carType");
+        const pickupLocationField = document.getElementById("pickupLocation");
+        const pickupLatitudeField = document.getElementById("pickupLatitude");
+        const pickupLongitudeField = document.getElementById("pickupLongitude");
+        const pickupMapLinkField = document.getElementById("pickupMapLink");
+        const useCurrentLocationButton = document.getElementById("useCurrentLocation");
+        const locationStatus = document.getElementById("locationStatus");
+        const selectedCar = new URLSearchParams(window.location.search).get("car");
+
+        function setLocationStatus(message, isError) {
+            locationStatus.textContent = message;
+            locationStatus.style.color = isError ? "#c0392b" : "#5f6573";
+        }
+
+        function updatePickupMapFields(latitude, longitude) {
+            const mapLink = "https://www.google.com/maps?q=" + latitude + "," + longitude;
+            pickupLatitudeField.value = latitude;
+            pickupLongitudeField.value = longitude;
+            pickupMapLinkField.value = mapLink;
+            pickupLocationField.value = latitude + ", " + longitude;
+            setLocationStatus("Current pickup location added from map.");
+        }
+
+        if (selectedCar) {
+            const matchingOption = Array.from(carTypeField.options).find(function (option) {
+                return option.value === selectedCar;
+            });
+
+            if (matchingOption) {
+                carTypeField.value = selectedCar;
+            }
+        }
+
+        useCurrentLocationButton.addEventListener("click", function () {
+            if (!navigator.geolocation) {
+                setLocationStatus("Location is not supported on this device.", true);
+                return;
+            }
+
+            setLocationStatus("Fetching your current pickup location...");
+
+            navigator.geolocation.getCurrentPosition(function (position) {
+                updatePickupMapFields(
+                    position.coords.latitude.toFixed(6),
+                    position.coords.longitude.toFixed(6)
+                );
+            }, function () {
+                setLocationStatus("Could not fetch location. Please allow location access and try again.", true);
+            }, {
+                enableHighAccuracy: true,
+                timeout: 10000,
+                maximumAge: 0
+            });
+        });
+
+        bookingForm.addEventListener("submit", function (event) {
+            event.preventDefault();
+
+            const formData = new FormData(bookingForm);
+            const travelDateValue = formData.get("travelDate");
+            const formattedDate = travelDateValue
+                ? new Date(travelDateValue).toLocaleDateString("en-IN", {
+                    day: "2-digit",
+                    month: "short",
+                    year: "numeric"
+                })
+                : "";
+            const pickupMapLink = formData.get("pickupMapLink");
+
+            const message = [
+                "Hello Ram Vijay Tours & Travels, I want to book a ride.",
+                "",
+                "Name: " + formData.get("customerName"),
+                "Mobile Number: " + formData.get("mobileNumber"),
+                "Pickup Location: " + formData.get("pickupLocation"),
+                pickupMapLink ? "Pickup Map: " + pickupMapLink : "",
+                "Drop Location: " + formData.get("dropLocation"),
+                "Date: " + formattedDate,
+                "Car: " + formData.get("carType")
+            ].filter(Boolean).join("\n");
+
+            window.open("https://wa.me/917756877762?text=" + encodeURIComponent(message), "_blank");
+        });
+    </script>
+</body>
+</html>

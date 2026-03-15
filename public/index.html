@@ -1,0 +1,701 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kadam Travels</title>
+    <style>
+        :root {
+            --brand-blue: #0d4a99;
+            --brand-blue-dark: #083a7b;
+            --page-bg: #f2f3f7;
+            --text-dark: #273042;
+            --text-soft: #4a5568;
+            --card-border: #e3e7ef;
+            --success: #1fa465;
+            --success-dark: #168552;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+            background: var(--page-bg);
+            color: var(--text-dark);
+            overflow-x: hidden;
+        }
+
+        a {
+            color: inherit;
+            text-decoration: none;
+        }
+
+        .topbar {
+            background: linear-gradient(180deg, var(--brand-blue), var(--brand-blue-dark));
+            color: #fff;
+            padding: 16px 48px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 24px;
+            font-weight: 600;
+        }
+
+        .contact-line {
+            text-align: center;
+        }
+
+        .nav {
+            display: flex;
+            gap: 36px;
+            flex-wrap: wrap;
+        }
+
+        .nav a {
+            position: relative;
+            font-size: 18px;
+        }
+
+        .nav a.active::after {
+            content: "";
+            position: absolute;
+            left: 0;
+            right: 0;
+            bottom: -10px;
+            height: 2px;
+            background: #fff;
+            border-radius: 999px;
+        }
+
+        .hero {
+            position: relative;
+            min-height: 500px;
+            overflow: hidden;
+            background: #aac2df;
+        }
+
+        .hero::after {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(180deg, rgba(6, 44, 94, 0.22) 0%, rgba(8, 28, 48, 0.08) 40%, rgba(0, 0, 0, 0.04) 100%);
+            z-index: 1;
+        }
+
+        .hero-bg {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            object-position: center;
+        }
+
+        .hero-inner {
+            position: relative;
+            z-index: 2;
+            text-align: center;
+            padding: 44px 20px 0;
+            color: #fff;
+            text-shadow: 0 3px 12px rgba(0, 0, 0, 0.35);
+        }
+        
+
+        .hero h1 {
+            margin: 0;
+            font-size: clamp(2.2rem, 4vw, 4rem);
+            line-height: 1.08;
+        }
+
+        .hero h2 {
+            margin: 18px 0 12px;
+            font-size: clamp(1.6rem, 2.5vw, 2.8rem);
+            font-weight: 400;
+        }
+
+        .hero p {
+            margin: 0;
+            font-size: clamp(1.05rem, 1.8vw, 1.65rem);
+        }
+
+        .section {
+            width: min(1120px, calc(100% - 40px));
+            margin: 0 auto;
+        }
+
+        .intro {
+            text-align: center;
+            padding: 34px 0 10px;
+        }
+
+        .title {
+            margin: 0 0 18px;
+            color: var(--brand-blue);
+            font-size: clamp(2rem, 3vw, 3.1rem);
+        }
+
+        .intro p,
+        .cars-note {
+            margin: 10px auto;
+            max-width: 980px;
+            font-size: clamp(1.1rem, 1.7vw, 1.45rem);
+            line-height: 1.45;
+            color: #333d4f;
+        }
+
+        .features {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 42px;
+            background: rgba(255, 255, 255, 0.72);
+            border: 1px solid var(--card-border);
+            border-radius: 6px;
+            padding: 28px 26px 20px;
+            box-shadow: 0 8px 24px rgba(13, 31, 61, 0.05);
+        }
+
+        .features h3 {
+            margin: 0 0 14px;
+            color: var(--brand-blue);
+            font-size: clamp(1.8rem, 2vw, 2.4rem);
+        }
+
+        .home-info {
+            margin: 28px 0 12px;
+            padding: 8px 4px;
+        }
+
+        .home-info-block + .home-info-block {
+            margin-top: 34px;
+        }
+
+        .home-info h3 {
+            margin: 0 0 16px;
+            color: var(--brand-blue);
+            font-size: clamp(1.9rem, 2.4vw, 2.5rem);
+        }
+
+        .home-info p {
+            margin: 0 0 18px;
+            color: #30394b;
+            font-size: clamp(1.08rem, 1.7vw, 1.45rem);
+            line-height: 1.7;
+        }
+
+        .home-info .whatsapp-text {
+            color: #2ab366;
+            font-weight: 600;
+        }
+
+        .checklist {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .checklist li {
+            position: relative;
+            padding-left: 26px;
+            margin: 12px 0;
+            font-size: clamp(1.1rem, 1.6vw, 1.35rem);
+            color: #2e3747;
+        }
+
+        .checklist li::before {
+            content: "\2713";
+            position: absolute;
+            left: 0;
+            top: 0;
+            color: #1f8d86;
+            font-weight: 700;
+        }
+
+        .cars-section {
+            padding: 28px 0 42px;
+        }
+
+        .section-heading {
+            display: flex;
+            align-items: center;
+            gap: 18px;
+            color: var(--brand-blue);
+            margin: 8px 0 18px;
+        }
+
+        .section-heading::before,
+        .section-heading::after {
+            content: "";
+            height: 1px;
+            flex: 1;
+            background: #dde3ee;
+        }
+
+        .section-heading h3 {
+            margin: 0;
+            font-size: clamp(2rem, 2.8vw, 2.8rem);
+        }
+
+        .car-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 16px;
+            margin-top: 22px;
+            padding: 16px;
+            background: rgba(255, 255, 255, 0.7);
+            border: 1px solid var(--card-border);
+            border-radius: 4px;
+        }
+
+        .car-card {
+            background: #fff;
+            border: 1px solid var(--card-border);
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .card-body {
+            padding: 14px 18px 6px;
+            text-align: center;
+        }
+
+        .car-card h4 {
+            margin: 0 0 12px;
+            color: var(--brand-blue);
+            font-size: 1.15rem;
+        }
+
+        .car-card ul {
+            margin: 0 0 8px;
+            text-align: left;
+            color: #2f3542;
+            font-size: 0.98rem;
+            line-height: 1.7;
+        }
+
+        .cta-wrap {
+            text-align: center;
+            padding: 18px 0 4px;
+        }
+
+        .booking-section {
+            padding: 12px 0 42px;
+        }
+
+        .booking-title {
+            margin: 0 0 26px;
+            text-align: center;
+            color: var(--brand-blue);
+            font-size: clamp(2.1rem, 3vw, 3rem);
+        }
+
+        .booking-card {
+            max-width: 860px;
+            margin: 0 auto;
+            padding: 28px 20px 24px;
+            background: rgba(255, 255, 255, 0.88);
+            border: 1px solid var(--card-border);
+            box-shadow: 0 10px 26px rgba(13, 31, 61, 0.07);
+        }
+
+        .booking-card h3 {
+            margin: 0;
+            text-align: center;
+            font-size: clamp(1.9rem, 2.4vw, 2.5rem);
+            color: #2c3240;
+        }
+
+        .booking-card p {
+            margin: 14px 0 24px;
+            text-align: center;
+            color: #4f5a6f;
+            font-size: 1.2rem;
+        }
+
+        .booking-form {
+            display: grid;
+            gap: 12px;
+        }
+
+        .field-row {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            min-height: 56px;
+            padding: 0 16px;
+            background: #fff;
+            border: 1px solid #d9dee7;
+            border-radius: 3px;
+        }
+
+        .field-icon {
+            width: 22px;
+            color: #7b8495;
+            font-size: 18px;
+            text-align: center;
+            flex-shrink: 0;
+        }
+
+        .field-row input,
+        .field-row select {
+            width: 100%;
+            border: 0;
+            outline: 0;
+            background: transparent;
+            color: #2d3442;
+            font-size: 1.15rem;
+            font-family: inherit;
+        }
+
+        .field-row select {
+            appearance: none;
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            cursor: pointer;
+        }
+
+        .select-row {
+            position: relative;
+        }
+
+        .select-row::after {
+            content: "\2304";
+            position: absolute;
+            right: 16px;
+            top: 50%;
+            transform: translateY(-58%);
+            color: #5d6678;
+            font-size: 24px;
+            pointer-events: none;
+        }
+
+        .booking-submit {
+            margin-top: 14px;
+            width: 100%;
+            min-height: 56px;
+            border: 0;
+            border-radius: 3px;
+            background: linear-gradient(180deg, #2baa53, #218d43);
+            color: #fff;
+            font-size: 1.3rem;
+            font-weight: 700;
+            font-family: inherit;
+            cursor: pointer;
+            box-shadow: 0 10px 22px rgba(33, 141, 67, 0.18);
+        }
+
+        .booking-submit:hover {
+            background: linear-gradient(180deg, #28a14d, #1d7d3b);
+        }
+
+        .whatsapp-btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            padding: 16px 42px;
+            border-radius: 4px;
+            background: linear-gradient(180deg, #28b66c, #169454);
+            color: #fff;
+            font-size: clamp(1.4rem, 2vw, 2rem);
+            font-weight: 700;
+            box-shadow: 0 10px 22px rgba(22, 148, 84, 0.22);
+        }
+
+        .whatsapp-icon {
+            width: 32px;
+            height: 32px;
+            border: 3px solid #fff;
+            border-radius: 50%;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 16px;
+            line-height: 1;
+        }
+
+        .footer {
+            margin-top: 22px;
+            background: linear-gradient(180deg, var(--brand-blue), var(--brand-blue-dark));
+            color: #fff;
+            padding: 18px 48px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            text-align: center;
+        }
+
+        .footer span {
+            display: inline-flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .phone-icon {
+            width: 28px;
+            height: 28px;
+            border: 2px solid #fff;
+            border-radius: 50%;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 13px;
+        }
+
+        .car-svg {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+
+        @media (max-width: 900px) {
+            .topbar {
+                padding: 14px 20px;
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .features,
+            .car-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .hero {
+                min-height: 420px;
+            }
+
+            .section-heading {
+                gap: 12px;
+            }
+        }
+
+        @media (max-width: 640px) {
+            .section {
+                width: min(100% - 24px, 1120px);
+            }
+
+            .hero {
+                min-height: 300px;
+            }
+
+            .hero-inner {
+                padding: 24px 16px 0;
+            }
+
+            .nav {
+                justify-content: center;
+                gap: 14px 18px;
+            }
+
+            .intro p,
+            .cars-note {
+                font-size: 1rem;
+            }
+
+            .features {
+                gap: 24px;
+                padding: 22px 16px 18px;
+            }
+
+            .home-info {
+                margin-top: 24px;
+            }
+
+            .car-grid {
+                margin-top: 18px;
+                padding: 12px;
+            }
+
+            .booking-card {
+                padding: 24px 16px 20px;
+            }
+
+            .booking-card p {
+                font-size: 1.05rem;
+            }
+
+            .field-row {
+                min-height: 52px;
+                padding: 0 14px;
+            }
+
+            .card-body {
+                padding: 12px 14px 4px;
+            }
+
+            .section-heading {
+                margin-bottom: 14px;
+            }
+
+            .section-heading::before,
+            .section-heading::after {
+                min-width: 28px;
+            }
+
+            .whatsapp-btn {
+                width: 100%;
+                padding: 15px 22px;
+                font-size: 1.2rem;
+            }
+
+            .booking-submit {
+                font-size: 1.1rem;
+            }
+
+            .footer,
+            .topbar {
+                padding-left: 16px;
+                padding-right: 16px;
+            }
+        }
+
+        @media (max-width: 420px) {
+            .topbar {
+                gap: 14px;
+                padding-top: 12px;
+                padding-bottom: 12px;
+            }
+
+            .nav {
+                flex-direction: column;
+                align-items: center;
+                gap: 12px;
+            }
+
+            .nav a {
+                font-size: 16px;
+            }
+
+            .nav a.active::after {
+                bottom: -6px;
+            }
+
+            .hero {
+                min-height: 260px;
+            }
+
+            .hero h1 {
+                font-size: 1.95rem;
+            }
+
+            .hero h2 {
+                margin-top: 12px;
+                font-size: 1.2rem;
+            }
+
+            .hero p {
+                font-size: 0.98rem;
+            }
+
+            .intro {
+                padding-top: 26px;
+            }
+
+            .title,
+            .section-heading h3,
+            .features h3 {
+                line-height: 1.15;
+            }
+
+            .car-card ul {
+                padding-left: 18px;
+            }
+
+            .whatsapp-btn {
+                gap: 10px;
+                font-size: 1.05rem;
+            }
+
+            .booking-title {
+                margin-bottom: 20px;
+            }
+
+            .booking-card h3 {
+                font-size: 1.8rem;
+            }
+
+            .field-row input,
+            .field-row select {
+                font-size: 1rem;
+            }
+
+            .booking-submit {
+                min-height: 52px;
+                font-size: 1rem;
+            }
+
+            .whatsapp-icon,
+            .phone-icon {
+                flex-shrink: 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="topbar">
+        <div class="contact-line">Call Us: +91 7756877762</div>
+        <nav class="nav">
+            <a class="active" href="index.html">Home</a>
+            <a href="cars.html">Our Cars</a>
+            <a href="booking.html">Booking</a>
+            <a href="contact.html">Contact</a>
+        </nav>
+    </header>
+
+    <section class="hero">
+        <img class="hero-bg" src="/images/homepage.png" alt="Kadam Travels fleet parked in front of hills">
+        <div class="hero-inner">
+            <h1>Welcome to Ram Vijay Tours & Travels</h1>
+            <h2>Your Comfort, Our Journey</h2>
+            <p>Safe, Comfortable and Affordable Travel Services</p>
+        </div>
+    </section>
+
+    <main class="section">
+        <section class="intro">
+            <p>Ram Vijay Tours & Travels provides safe, comfortable and affordable travel services.</p>
+            <p>We offer different types of cars for local travel, outstation trips and airport pickup and drop services.</p>
+            <p>Our aim is to provide reliable and convenient transportation to our customers.</p>
+        </section>
+
+        <section class="features">
+            <div>
+                <h3>Our Services</h3>
+                <ul class="checklist">
+                    <li>Local City Travel</li>
+                    <li>Outstation Trips</li>
+                    <li>Airport Pickup and Drop</li>
+                    <li>Family and Group Travel</li>
+                    <li>Corporate Travel Services</li>
+                </ul>
+            </div>
+            <div>
+                <h3>Why Choose Kadam Travels</h3>
+                <ul class="checklist">
+                    <li>Clean and well maintained cars</li>
+                    <li>Affordable price per kilometer</li>
+                    <li>Experienced and professional drivers</li>
+                    <li>Safe and comfortable journey</li>
+                    <li>24/7 customer support</li>
+                </ul>
+            </div>
+        </section>
+
+        <section class="home-info">
+            <div class="home-info-block">
+                <h3>Available Cars</h3>
+                <p>Swift Dzire, Ertiga and Innova cars are available for booking.</p>
+                <p>Please visit the Our Cars page to see car photos, price and seating details.</p>
+            </div>
+
+            <div class="home-info-block">
+                <h3>Book Your Ride</h3>
+                <p>To book a car please visit the Booking page or contact us on <span class="whatsapp-text">WhatsApp</span> or call us directly.</p>
+            </div>
+        </section>
+    </main>
+
+    
+</body>
+</html>
