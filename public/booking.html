@@ -218,6 +218,33 @@
             font-size: 0.95rem;
         }
 
+        .map-card {
+            display: grid;
+            gap: 10px;
+            padding: 14px;
+            background: #fff;
+            border: 1px solid #dedfe3;
+            border-radius: 3px;
+        }
+
+        .map-card[hidden] {
+            display: none;
+        }
+
+        .map-help {
+            margin: 0;
+            color: var(--text-soft);
+            font-size: 0.95rem;
+        }
+
+        .pickup-map {
+            min-height: 320px;
+            width: 100%;
+            border-radius: 3px;
+            overflow: hidden;
+            background: #e8edf5;
+        }
+
         @media (max-width: 760px) {
             .topbar {
                 padding: 14px 18px;
@@ -319,8 +346,13 @@
                 </label>
 
                 <div class="location-tools">
-                    <button class="location-button" id="useCurrentLocation" type="button">Use Current Pickup Location from Map</button>
+                    <button class="location-button" id="toggleMapButton" type="button">Select Pickup Location on Map</button>
                     <div class="location-status" id="locationStatus"></div>
+                </div>
+
+                <div class="map-card" id="mapCard" hidden>
+                    <p class="map-help">Tap on the Google Map to set the pickup location.</p>
+                    <div class="pickup-map" id="pickupMap" aria-label="Pickup location map"></div>
                 </div>
 
                 <input id="pickupLatitude" name="pickupLatitude" type="hidden">
@@ -357,15 +389,21 @@
     </main>
 
     <script>
+        const googleMapsApiKey = "AIzaSyB_l1hC5_hb4I7relMBKhKIHGD4IlSh8R4";
         const bookingForm = document.getElementById("bookingForm");
         const carTypeField = document.getElementById("carType");
         const pickupLocationField = document.getElementById("pickupLocation");
         const pickupLatitudeField = document.getElementById("pickupLatitude");
         const pickupLongitudeField = document.getElementById("pickupLongitude");
         const pickupMapLinkField = document.getElementById("pickupMapLink");
-        const useCurrentLocationButton = document.getElementById("useCurrentLocation");
+        const toggleMapButton = document.getElementById("toggleMapButton");
+        const mapCard = document.getElementById("mapCard");
+        const pickupMapElement = document.getElementById("pickupMap");
         const locationStatus = document.getElementById("locationStatus");
         const selectedCar = new URLSearchParams(window.location.search).get("car");
+        let pickupMap;
+        let pickupMarker;
+        let googleMapsReady;
 
         function setLocationStatus(message, isError) {
             locationStatus.textContent = message;
@@ -378,7 +416,89 @@
             pickupLongitudeField.value = longitude;
             pickupMapLinkField.value = mapLink;
             pickupLocationField.value = latitude + ", " + longitude;
-            setLocationStatus("Current pickup location added from map.");
+            setLocationStatus("Pickup location selected on map.");
+        }
+
+        function reverseGeocodeLocation(latitude, longitude) {
+            if (!window.google || !google.maps || !google.maps.Geocoder) {
+                updatePickupMapFields(latitude, longitude);
+                return;
+            }
+
+            const geocoder = new google.maps.Geocoder();
+
+            geocoder.geocode({
+                location: {
+                    lat: Number(latitude),
+                    lng: Number(longitude)
+                }
+            }, function (results, status) {
+                updatePickupMapFields(latitude, longitude);
+
+                if (status === "OK" && results && results[0]) {
+                    pickupLocationField.value = results[0].formatted_address;
+                }
+            });
+        }
+
+        function placePickupMarker(location) {
+            if (!pickupMap || !window.google) {
+                return;
+            }
+
+            if (!pickupMarker) {
+                pickupMarker = new google.maps.Marker({
+                    map: pickupMap,
+                    position: location
+                });
+            } else {
+                pickupMarker.setPosition(location);
+            }
+
+            pickupMap.panTo(location);
+            reverseGeocodeLocation(location.lat().toFixed(6), location.lng().toFixed(6));
+        }
+
+        function createPickupMap(center) {
+            pickupMap = new google.maps.Map(pickupMapElement, {
+                center: center,
+                zoom: 13,
+                mapTypeControl: false,
+                streetViewControl: false,
+                fullscreenControl: false
+            });
+
+            pickupMap.addListener("click", function (event) {
+                placePickupMarker(event.latLng);
+            });
+        }
+
+        function loadGoogleMaps() {
+            if (window.google && window.google.maps) {
+                return Promise.resolve();
+            }
+
+            if (googleMapsReady) {
+                return googleMapsReady;
+            }
+
+            googleMapsReady = new Promise(function (resolve, reject) {
+                window.initPickupMap = function () {
+                    resolve();
+                    delete window.initPickupMap;
+                };
+
+                const script = document.createElement("script");
+                script.src = "https://maps.googleapis.com/maps/api/js?key=" + googleMapsApiKey + "&libraries=places&callback=initPickupMap";
+                script.async = true;
+                script.defer = true;
+                script.onerror = function () {
+                    reject(new Error("Google Maps failed to load."));
+                };
+                document.head.appendChild(script);
+            });
+
+            return googleMapsReady;
         }
 
         if (selectedCar) {
@@ -391,25 +511,52 @@
             }
         }
 
-        useCurrentLocationButton.addEventListener("click", function () {
-            if (!navigator.geolocation) {
-                setLocationStatus("Location is not supported on this device.", true);
+        toggleMapButton.addEventListener("click", function () {
+            const isHidden = mapCard.hasAttribute("hidden");
+
+            if (!isHidden) {
+                mapCard.setAttribute("hidden", "");
+                toggleMapButton.textContent = "Select Pickup Location on Map";
                 return;
             }
 
-            setLocationStatus("Fetching your current pickup location...");
+            mapCard.removeAttribute("hidden");
+            toggleMapButton.textContent = "Hide Pickup Map";
+            setLocationStatus("Loading Google Map...");
 
-            navigator.geolocation.getCurrentPosition(function (position) {
-                updatePickupMapFields(
-                    position.coords.latitude.toFixed(6),
-                    position.coords.longitude.toFixed(6)
-                );
-            }, function () {
-                setLocationStatus("Could not fetch location. Please allow location access and try again.", true);
-            }, {
-                enableHighAccuracy: true,
-                timeout: 10000,
-                maximumAge: 0
+            loadGoogleMaps().then(function () {
+                if (pickupMap) {
+                    google.maps.event.trigger(pickupMap, "resize");
+                    setLocationStatus("Tap on the map to choose pickup location.");
+                    return;
+                }
+
+                const defaultCenter = { lat: 18.5204, lng: 73.8567 };
+
+                createPickupMap(defaultCenter);
+                setLocationStatus("Tap on the map to choose pickup location.");
+
+                if (!navigator.geolocation) {
+                    return;
+                }
+
+                navigator.geolocation.getCurrentPosition(function (position) {
+                    const userLocation = {
+                        lat: position.coords.latitude,
+                        lng: position.coords.longitude
+                    };
+
+                    pickupMap.setCenter(userLocation);
+                    placePickupMarker(new google.maps.LatLng(userLocation.lat, userLocation.lng));
+                }, function () {
+                    setLocationStatus("Tap on the map to choose pickup location.");
+                }, {
+                    enableHighAccuracy: true,
+                    timeout: 10000,
+                    maximumAge: 0
+                });
+            }).catch(function () {
+                setLocationStatus("Google Map could not load. Please check the API key.", true);
             });
         });
 
